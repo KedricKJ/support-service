@@ -2,11 +2,16 @@ package com.inntri.support.enums;
 
 public enum Status {
 
-    ACTIVE("ACTIVE","A"),DELETED("DELETED","D");
+    ACTIVE("ACTIVE","A"),
+    DELETED("DELETED","D"),
+    TERMINATION("TERMINATION","T"),
+    RESIGNATION("RESIGNATION","RES"),
+    RETIREMENT("RETIREMENT","RET");
+    //(Termination / Resignation / Retirement)
 
-    private String label;
+    private final String label;
 
-    private String value;
+    private final String value;
 
     Status(String label, String value) {
         this.label = label;

@@ -1,8 +1,8 @@
 package com.inntri.support.wrapper;
 
 import com.inntri.support.enums.RestApiResponseStatus;
-import com.inntri.support.utils.ValidationFailure;
-import lombok.Data;
+import com.inntri.support.utils.exceptions.ValidationFailure;
+
 import java.util.Collections;
 import java.util.List;
 

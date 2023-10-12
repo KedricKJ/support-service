@@ -1,7 +1,5 @@
 package com.inntri.support.utils.exceptions;
 
-import com.inntri.support.utils.ValidationFailure;
-
 import java.util.List;
 
 /**

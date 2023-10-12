@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 @Component
 public class HeaderExtractInterceptor implements HandlerInterceptor {
@@ -23,20 +24,35 @@ public class HeaderExtractInterceptor implements HandlerInterceptor {
 
     //if (request.getHeader("secure") != null && request.getHeader("secure").equals("t")) {
     //if (validator.isSecured.test(request.getHeader("path"))) {
+    System.out.println("userId : {}"+ request.getHeader("userId"));
       if (request.getHeader("userId") != null) {
         userId = Long.valueOf(request.getHeader("userId"));
       }
+    System.out.println("companyId : {}"+ request.getHeader("companyId"));
       if (request.getHeader("companyId") != null) {
         companyId = Long.valueOf(request.getHeader("companyId"));
       }
       loggedInUser = request.getHeader("loggedInUser");
+    System.out.println("loggedInUser : {}"+ loggedInUser);
       if (request.getHeader("companyId") != null) {
       tenantIdentifierResolver.setCurrentTenant(request.getHeader("companyId"));
       } /*else {
         tenantIdentifierResolver.setCurrentTenant(String.valueOf(16));
       }*/
+    /*System.out.println("current tenant  : {}"+ tenantIdentifierResolver.getCurrentTenant());
+    if (Objects.equals(tenantIdentifierResolver.getCurrentTenant(), "unknown")) {
+      throw new ComplexValidationException("company.invalid","Current company selection is invalid. Please contact system admin.");
+    }*/
     return true;
   }
+
+
+  @Override
+  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+    tenantIdentifierResolver.setCurrentTenant(null);
+  }
+
+
 
   public void setCurrentTenant(String tenant) {
     tenantIdentifierResolver.setCurrentTenant(tenant);
