@@ -5,6 +5,7 @@ import com.inntri.support.wrapper.BaseResponseWrapper;
 import com.inntri.support.wrapper.ValidationFailureResponseWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -48,19 +49,31 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+    /*protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
         BindingResult result = ex.getBindingResult();
         List<FieldError> fieldErrors = result.getFieldErrors();
         ValidationFailureResponseWrapper validationFailureResponseWrapper = popolateFieldValidationErrors(fieldErrors);
         return new ResponseEntity<>(new ValidationFailureResponseWrapper(validationFailureResponseWrapper.getValidationFailures()), HttpStatus.BAD_REQUEST);
 
+    }*/
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        BindingResult result = ex.getBindingResult();
+        System.out.println("handleMethodArgumentNotValid ex "+ex.getBody());
+        System.out.println("handleMethodArgumentNotValid ex "+ex.getMessage());
+        System.out.println("handleMethodArgumentNotValid ex "+ex.getBindingResult());
+        System.out.println("handleMethodArgumentNotValid ex "+ex.getLocalizedMessage());
+        List<FieldError> fieldErrors = result.getFieldErrors();
+        ValidationFailureResponseWrapper validationFailureResponseWrapper = popolateFieldValidationErrors(fieldErrors);
+        return new ResponseEntity<>(new ValidationFailureResponseWrapper(validationFailureResponseWrapper.getValidationFailures()), HttpStatus.BAD_REQUEST);
     }
 
     public ValidationFailureResponseWrapper popolateFieldValidationErrors(List<FieldError> fieldErrors) {
         List<ValidationFailure> ValidationFailures = new ArrayList<>();
         fieldErrors.forEach(fieldError -> {
-            ValidationFailures.add(new ValidationFailure(fieldError.getField(),fieldError.getCode()));
+            ValidationFailures.add(new ValidationFailure(fieldError.getField(),fieldError.getDefaultMessage()));
         });
         ValidationFailureResponseWrapper validationFailureResponseWrapper = new ValidationFailureResponseWrapper(ValidationFailures);
         return validationFailureResponseWrapper;
