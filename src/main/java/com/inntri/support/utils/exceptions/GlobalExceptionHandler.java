@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -40,6 +41,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         } else {
             return new ResponseEntity<>(
                     new ValidationFailureResponseWrapper(ex.getField(), ex.getCode()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(PermissionException.class)
+    public ResponseEntity<BaseResponseWrapper> handlePermissionException(PermissionException ex,
+                                                                                WebRequest request) {
+
+        System.out.println("Permission exception occured");
+        if (ex.getValidationFailures() != null) {
+            return new ResponseEntity<>(
+                    new ValidationFailureResponseWrapper(ex.getValidationFailures()), HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>(
+                    new ValidationFailureResponseWrapper(ex.getField(), ex.getCode()), HttpStatus.FORBIDDEN);
         }
     }
 

@@ -24,7 +24,7 @@ public class HeaderExtractInterceptor implements HandlerInterceptor {
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
     String secure = request.getHeader("secure");
-    System.out.println("request.getPathInfo : {}"+ secure);
+    System.out.println("request.is secure  : {}"+ secure);
 
     //if (request.getHeader("secure") != null && request.getHeader("secure").equals("t")) {
     //if (validator.isSecured.test(request.getHeader("path"))) {
