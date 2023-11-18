@@ -44,6 +44,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<BaseResponseWrapper> handleAuthenticationException(ComplexValidationException ex,
+                                                                                WebRequest request) {
+        if (ex.getValidationFailures() != null) {
+            return new ResponseEntity<>(
+                    new ValidationFailureResponseWrapper(ex.getValidationFailures()), HttpStatus.UNAUTHORIZED);
+        } else {
+            return new ResponseEntity<>(
+                    new ValidationFailureResponseWrapper(ex.getField(), ex.getCode()), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(PermissionException.class)
     public ResponseEntity<BaseResponseWrapper> handlePermissionException(PermissionException ex,

@@ -9,13 +9,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class HeaderExtractInterceptor implements HandlerInterceptor {
 
   private Long userId = 0L;
-  private Long companyId = 0L;
+  private String companyCode;
   private String loggedInUser = "inntri@xxxxx.com";
 
   @Autowired private TenantIdentifierResolver currentTenantIdentifierResolverImpl;
@@ -28,22 +32,27 @@ public class HeaderExtractInterceptor implements HandlerInterceptor {
 
     //if (request.getHeader("secure") != null && request.getHeader("secure").equals("t")) {
     //if (validator.isSecured.test(request.getHeader("path"))) {
-    System.out.println("userId : {}"+ request.getHeader("userId"));
+
 
       if (request.getHeader("userId") != null) {
         userId = Long.valueOf(request.getHeader("userId"));
+        System.out.println("userId : {}"+ request.getHeader("userId"));
       }
-    System.out.println("companyId : {}"+ request.getHeader("companyId"));
 
-      if (request.getHeader("companyId") != null) {
-        companyId = Long.valueOf(request.getHeader("companyId"));
+      if (request.getHeader("companyCode") != null) {
+        companyCode = request.getHeader("companyCode");
       }
+    System.out.println("companyCode : {}"+ companyCode);
+
       loggedInUser = request.getHeader("loggedInUser");
     System.out.println("loggedInUser : {}"+ loggedInUser);
 
-      if (request.getHeader("companyId") != null) {
-      currentTenantIdentifierResolverImpl.setCurrentTenant(request.getHeader("companyId"));
+      if (companyCode != null) {
+      currentTenantIdentifierResolverImpl.setCurrentTenant(companyCode);
       }
+
+    String authoritiesStr = request.getHeader("authorities");
+    System.out.println("authoritiesStr : {}"+ authoritiesStr);
 
     System.out.println("current tenant  : {}"+ currentTenantIdentifierResolverImpl.getCurrentTenant());
       if (currentTenantIdentifierResolverImpl.getCurrentTenant() == null) {
@@ -75,14 +84,6 @@ public class HeaderExtractInterceptor implements HandlerInterceptor {
     this.userId = userId;
   }
 
-  public Long getCompanyId() {
-    return companyId;
-  }
-
-  public void setCompanyId(Long companyId) {
-    this.companyId = companyId;
-  }
-
   public String getLoggedInUser() {
     return loggedInUser;
   }
@@ -91,7 +92,13 @@ public class HeaderExtractInterceptor implements HandlerInterceptor {
     this.loggedInUser = loggedInUser;
   }
 
+  public String getCompanyCode() {
+    return companyCode;
+  }
 
+  public void setCompanyCode(String companyCode) {
+    this.companyCode = companyCode;
+  }
 
   public TenantIdentifierResolver getCurrentTenantIdentifierResolverImpl() {
     return currentTenantIdentifierResolverImpl;
