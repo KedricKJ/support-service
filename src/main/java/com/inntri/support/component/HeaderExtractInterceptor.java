@@ -1,19 +1,12 @@
 package com.inntri.support.component;
 
 import com.inntri.support.config.TenantIdentifierResolver;
-import com.inntri.support.utils.exceptions.ComplexValidationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 public class HeaderExtractInterceptor implements HandlerInterceptor {
@@ -27,13 +20,6 @@ public class HeaderExtractInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
-    String secure = request.getHeader("secure");
-    System.out.println("request.is secure  : {}"+ secure);
-
-    //if (request.getHeader("secure") != null && request.getHeader("secure").equals("t")) {
-    //if (validator.isSecured.test(request.getHeader("path"))) {
-
-
       if (request.getHeader("userId") != null) {
         userId = Long.valueOf(request.getHeader("userId"));
         System.out.println("userId : {}"+ request.getHeader("userId"));
@@ -58,9 +44,9 @@ public class HeaderExtractInterceptor implements HandlerInterceptor {
       if (currentTenantIdentifierResolverImpl.getCurrentTenant() == null) {
         currentTenantIdentifierResolverImpl.setCurrentTenant("unknown");
       }
-    if (secure.equals("true") && Objects.equals(currentTenantIdentifierResolverImpl.getCurrentTenant(), "unknown")) {
+    /*if (Objects.equals(currentTenantIdentifierResolverImpl.getCurrentTenant(), "unknown")) {
       throw new ComplexValidationException("company.id","Current company selection : "+ currentTenantIdentifierResolverImpl.getCurrentTenant()+ " is invalid. Please contact system admin.");
-    }
+    }*/
     return true;
   }
 
