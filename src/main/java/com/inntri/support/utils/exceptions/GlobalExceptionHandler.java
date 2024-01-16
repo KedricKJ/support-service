@@ -76,6 +76,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some SQL exception occured");
     }
 
+    @ExceptionHandler(HrmsServiceException.class)
+    public ResponseEntity<?> handleHrmsServiceException(HrmsServiceException ex) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ex.getMessage());
+        //return ResponseEntity.internalServerError().body(customError);
+
+
+    }
 
     /*protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {

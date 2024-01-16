@@ -8,9 +8,17 @@ public enum RestApiResponseStatus {
 
     private Integer code;
 
+    private String message;
+
     RestApiResponseStatus(String status, Integer code) {
         this.status = status;
         this.code = code;
+    }
+
+    RestApiResponseStatus(String status, Integer code, String message) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
     }
 
     public String getStatus() {
@@ -19,6 +27,14 @@ public enum RestApiResponseStatus {
 
     public Integer getCode() {
         return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override
