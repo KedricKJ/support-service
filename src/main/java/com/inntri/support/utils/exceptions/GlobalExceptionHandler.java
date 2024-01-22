@@ -44,6 +44,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
     }
 
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<BaseResponseWrapper> handleEntityAlreadyExistsException(ComplexValidationException ex,
+                                                                                WebRequest request) {
+        if (ex.getValidationFailures() != null) {
+            return new ResponseEntity<>(
+                    new ValidationFailureResponseWrapper(ex.getValidationFailures()), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(
+                    new ValidationFailureResponseWrapper(ex.getField(), ex.getCode()), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<BaseResponseWrapper> handleAuthenticationException(ComplexValidationException ex,
                                                                                 WebRequest request) {

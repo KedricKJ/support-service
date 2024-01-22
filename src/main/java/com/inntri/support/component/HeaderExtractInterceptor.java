@@ -40,6 +40,9 @@ public class HeaderExtractInterceptor implements HandlerInterceptor {
     String authoritiesStr = request.getHeader("authorities");
     System.out.println("authoritiesStr : {}"+ authoritiesStr);
 
+    String accessToken = request.getHeader("accessToken");
+    System.out.println("accessToken : {}"+ accessToken);
+
     System.out.println("current tenant  : {}"+ currentTenantIdentifierResolverImpl.getCurrentTenant());
       if (currentTenantIdentifierResolverImpl.getCurrentTenant() == null) {
         currentTenantIdentifierResolverImpl.setCurrentTenant("unknown");
