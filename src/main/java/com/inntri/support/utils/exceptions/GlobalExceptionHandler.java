@@ -2,6 +2,7 @@ package com.inntri.support.utils.exceptions;
 
 
 import com.inntri.support.wrapper.BaseResponseWrapper;
+import com.inntri.support.wrapper.ExceptionResponseWrapper;
 import com.inntri.support.wrapper.ValidationFailureResponseWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             return new ResponseEntity<>(
                     new ValidationFailureResponseWrapper(ex.getField(), ex.getCode()), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<BaseResponseWrapper> handleEntityNotFound(
+            EntityNotFoundException ex) {
+        return new ResponseEntity<>(
+                new ExceptionResponseWrapper(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
