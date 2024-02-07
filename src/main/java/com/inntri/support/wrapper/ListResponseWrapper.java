@@ -15,6 +15,11 @@ public class ListResponseWrapper<T> extends BaseResponseWrapper {
         super(RestApiResponseStatus.OK);
         this.content = content;
     }
+    public ListResponseWrapper(List<T> content, String message) {
+        super(RestApiResponseStatus.OK);
+        this.content = content;
+        this.message = message;
+    }
 
     public List<T> getContent() {
         return this.content;
