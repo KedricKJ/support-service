@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.security.auth.login.CredentialExpiredException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,10 +78,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 new ExceptionResponseWrapper(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    //@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(PermissionException.class)
     public ResponseEntity<BaseResponseWrapper> handlePermissionException(PermissionException ex,
                                                                                 WebRequest request) {
+
+        System.out.println("Permission exception occured");
+        if (ex.getValidationFailures() != null) {
+            return new ResponseEntity<>(
+                    new ValidationFailureResponseWrapper(ex.getValidationFailures()), HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>(
+                    new ValidationFailureResponseWrapper(ex.getField(), ex.getCode()), HttpStatus.FORBIDDEN);
+        }
+    }
+
+    //@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(CredentialsExpiredException.class)
+    public ResponseEntity<BaseResponseWrapper> handleCredentialException(PermissionException ex,
+                                                                         WebRequest request) {
 
         System.out.println("Permission exception occured");
         if (ex.getValidationFailures() != null) {
