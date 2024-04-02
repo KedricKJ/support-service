@@ -37,4 +37,6 @@ public class AuthenticateResponse {
 
   private int mode;
 
+  private Boolean isAdmin;
+
 }
