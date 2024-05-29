@@ -16,11 +16,11 @@ public abstract class BaseSearchRequest {
     )
     private Integer pageNumber = 1;
     @Min(
-            value = 10L,
+            value = 1L,
             message = "{searchRequest.pagination.pageSize.invalid}"
     )
     @Max(
-            value = 1000L,
+            value = 10000L,
             message = "{searchRequest.pagination.pageSize.invalid}"
     )
     private Integer pageSize = 50;
@@ -29,7 +29,7 @@ public abstract class BaseSearchRequest {
             flags = {Pattern.Flag.CASE_INSENSITIVE},
             message = "{searchRequest.pagination.sortDirection.invalid}"
     )
-    private String sortDirection = "desc";
+    private String sortDirection = "asc";
 
     public abstract String getSortProperty();
 
