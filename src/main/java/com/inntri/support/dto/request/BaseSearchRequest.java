@@ -29,7 +29,7 @@ public abstract class BaseSearchRequest {
             flags = {Pattern.Flag.CASE_INSENSITIVE},
             message = "{searchRequest.pagination.sortDirection.invalid}"
     )
-    private String sortDirection = "asc";
+    private String sortDirection = "desc";
 
     public abstract String getSortProperty();
 
